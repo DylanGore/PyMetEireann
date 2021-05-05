@@ -7,6 +7,7 @@ setup(
     version='0.2',
     description='A library to communicate with the Met Éireann Public Weather Forecast API',
     author='Dylan Gore',
+    license='MIT',
     url='https://github.com/DylanGore/PyMetEireann/',
     classifiers=[
         'Development Status :: 3 - Alpha',
