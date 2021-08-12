@@ -5,7 +5,7 @@
 ![PyPI](https://img.shields.io/pypi/v/PyMetEireann?style=for-the-badge)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/PyMetEireann?style=for-the-badge)
 
-A Python library to communicate with the [Met Éireann](https://www.met.ie/) Public [Weather Forecast API](https://data.gov.ie/dataset/met-eireann-weather-forecast-api).
+A Python library to communicate with the [Met Éireann](https://www.met.ie/) Public [Weather Forecast API](https://data.gov.ie/dataset/met-eireann-weather-forecast-api) and [Weather Warning API](https://data.gov.ie/dataset/weather-warnings).
 
 The project is an independant fork of [pyMetno](https://github.com/Danielhiversen/pyMetno) by [Daniel Hjelseth Høyer](https://github.com/Danielhiversen/pyMetno/). It is in no way affiliated with or endorsed by Met Éireann.
 
