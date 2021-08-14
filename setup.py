@@ -10,7 +10,7 @@ setup(
     name='PyMetEireann',
     packages=['meteireann'],
     install_requires=['xmltodict', 'aiohttp', 'async_timeout', 'pytz'],
-    version='0.3',
+    version='0.4',
     description='A library to communicate with the Met Éireann Public Weather Forecast and Weather Warning APIs',
     long_description=long_description,
     long_description_content_type='text/markdown',
