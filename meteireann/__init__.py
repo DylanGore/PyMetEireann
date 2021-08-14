@@ -164,8 +164,11 @@ class WeatherData:
         '''Initialize the weather object.'''
         # pylint: disable=too-many-arguments
 
+        # Get the current UTC time
+        now = datetime.datetime.utcnow()
+
         # Store the forecast parameters
-        self._api_url = f'{api_url}?lat={latitude};long={longitude};alt={altitude}'
+        self._api_url = f'{api_url}?lat={latitude};long={longitude};alt={altitude};from={now.date()}T{now.hour}:00'
 
         # Create a new session if one isn't passed in
         if websession is None:
