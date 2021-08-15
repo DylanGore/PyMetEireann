@@ -230,7 +230,7 @@ class WeatherData:
         if self.data is None:
             return {}
 
-        day = time.date()
+        day = datetime.datetime.utcnow().replace(minute=0, second=0, microsecond=0)
         daily_temperatures = []
         daily_precipitation = []
         daily_windspeed = []
