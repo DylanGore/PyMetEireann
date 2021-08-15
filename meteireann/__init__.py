@@ -205,7 +205,7 @@ class WeatherData:
 
     def get_current_weather(self):
         '''Get the current weather data from Met Éireann.'''
-        return self.get_weather(datetime.datetime.now(pytz.utc))
+        return self.get_weather(datetime.datetime.now(pytz.utc).replace(minute=0, second=0, microsecond=0))
 
     def get_forecast(self, time_zone, hourly=False):
         '''Get the forecast weather data from Met Éireann.'''
@@ -229,8 +229,7 @@ class WeatherData:
         # pylint: disable=too-many-locals
         if self.data is None:
             return {}
-
-        day = datetime.datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+        day = time.date()
         daily_temperatures = []
         daily_precipitation = []
         daily_windspeed = []
