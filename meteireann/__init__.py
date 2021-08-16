@@ -164,8 +164,11 @@ class WeatherData:
         '''Initialize the weather object.'''
         # pylint: disable=too-many-arguments
 
+        # Get the current UTC time
+        now = datetime.datetime.utcnow()
+
         # Store the forecast parameters
-        self._api_url = f'{api_url}?lat={latitude};long={longitude};alt={altitude}'
+        self._api_url = f'{api_url}?lat={latitude};long={longitude};alt={altitude};from={now.date()}T{now.hour}:00'
 
         # Create a new session if one isn't passed in
         if websession is None:
@@ -202,7 +205,7 @@ class WeatherData:
 
     def get_current_weather(self):
         '''Get the current weather data from Met Éireann.'''
-        return self.get_weather(datetime.datetime.now(pytz.utc))
+        return self.get_weather(datetime.datetime.now(pytz.utc).replace(minute=0, second=0, microsecond=0))
 
     def get_forecast(self, time_zone, hourly=False):
         '''Get the forecast weather data from Met Éireann.'''
@@ -226,7 +229,6 @@ class WeatherData:
         # pylint: disable=too-many-locals
         if self.data is None:
             return {}
-
         day = time.date()
         daily_temperatures = []
         daily_precipitation = []
