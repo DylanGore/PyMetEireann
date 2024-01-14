@@ -205,7 +205,7 @@ class WeatherData:
 
     def get_current_weather(self):
         '''Get the current weather data from Met Éireann.'''
-        return self.get_weather(datetime.datetime.now(pytz.utc).replace(minute=0, second=0, microsecond=0))
+        return self.get_weather(datetime.datetime.now(pytz.utc).replace(minute=0, second=0, microsecond=0), hourly=True)
 
     def get_forecast(self, time_zone, hourly=False):
         '''Get the forecast weather data from Met Éireann.'''
