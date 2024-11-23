@@ -9,7 +9,7 @@ import async_timeout
 import pytz
 import xmltodict
 
-API_URL = 'http://metwdb-openaccess.ichec.ie/metno-wdb2ts/locationforecast'
+API_URL = 'http://openaccess.pf.api.met.ie/metno-wdb2ts/locationforecast'
 WARNING_API_URL = 'https://www.met.ie/Open_Data/json/warning_'
 
 # Map each region code to a region name
