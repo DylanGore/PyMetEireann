@@ -234,6 +234,7 @@ class WeatherData:
         daily_precipitation = []
         daily_windspeed = []
         daily_windgust = []
+        daily_dew_point = []
         ordered_entries = []
         for time_entry in self.data['product']['time']:
             valid_from = parse_datetime(time_entry['@from'])
@@ -261,6 +262,10 @@ class WeatherData:
                     daily_windgust.append(
                         get_value(time_entry['location']['windGust'], '@mps')
                     )
+                if 'dewpointTemperature' in time_entry['location']:
+                    daily_dew_point.append(
+                        get_value(time_entry['location']['dewpointTemperature'], '@value')
+                    )
 
             average_dist = abs((valid_to - time).total_seconds()) + abs(
                 (valid_from - time).total_seconds()
@@ -286,6 +291,7 @@ class WeatherData:
             res['wind_speed'] = get_data('windSpeed', ordered_entries)
             res['wind_gust'] = get_data('windGust', ordered_entries)
             res['cloudiness'] = get_data('cloudiness', ordered_entries)
+            res['dew_point'] = get_data('dewpointTemperature', ordered_entries)
         else:
             res['temperature'] = (
                 None if daily_temperatures == [] else max(daily_temperatures)
@@ -301,6 +307,9 @@ class WeatherData:
             )
             res['wind_gust'] = (
                 None if daily_windgust == [] else max(daily_windgust)
+            )
+            res['dew_point'] = (
+                None if daily_dew_point == [] else max(daily_dew_point)
             )
         return res
 
