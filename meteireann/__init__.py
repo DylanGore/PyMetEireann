@@ -2,12 +2,17 @@
 import asyncio
 import datetime
 import logging
+from importlib.metadata import PackageNotFoundError, version
 from xml.parsers.expat import ExpatError
 
 import aiohttp
-import async_timeout
 import pytz
 import xmltodict
+
+try:
+    __version__ = version("PyMetEireann")
+except PackageNotFoundError:
+    __version__ = "0.0.0-dev"
 
 API_URL = 'http://openaccess.pf.api.met.ie/metno-wdb2ts/locationforecast'
 WARNING_API_URL = 'https://www.met.ie/Open_Data/json/warning_'
@@ -74,7 +79,7 @@ class WarningData:
     def __init__(self, websession=None, api_url=WARNING_API_URL, region='Ireland',
                  convert_to_utc=True, ignore_blight=True):
         '''Initialize the warning object.'''
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments,too-many-positional-arguments
 
         # Set the various option variables
         self._ignore_blight = ignore_blight
@@ -106,14 +111,14 @@ class WarningData:
     async def fetching_data(self, *_):
         '''Get the latest data from the warning API'''
         try:
-            with async_timeout.timeout(10):
+            async with asyncio.timeout(10):
                 res = await self._websession.get(self._api_url)
             # Log any 400+ HTTP error codes
             if res.status >= 400:
                 _LOGGER.error('%s returned %s', self._api_url, res.status)
                 return False
             json = await res.json()
-        except (asyncio.TimeoutError, aiohttp.ClientError) as err:
+        except (TimeoutError, aiohttp.ClientError) as err:
             _LOGGER.error('%s returned %s', self._api_url, err)
             return False
         try:
@@ -162,7 +167,7 @@ class WeatherData:
 
     def __init__(self, websession=None, api_url=API_URL, latitude=54.7210798611, longitude=-8.7237392806, altitude=0):
         '''Initialize the weather object.'''
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments,too-many-positional-arguments
 
         # Get the current UTC time
         now = datetime.datetime.utcnow()
@@ -186,14 +191,14 @@ class WeatherData:
     async def fetching_data(self, *_):
         '''Get the latest data from the API'''
         try:
-            with async_timeout.timeout(10):
+            async with asyncio.timeout(10):
                 resp = await self._websession.get(self._api_url)
             # Log any 400+ HTTP error codes
             if resp.status >= 400:
                 _LOGGER.error('%s returned %s', self._api_url, resp.status)
                 return False
             text = await resp.text()
-        except (asyncio.TimeoutError, aiohttp.ClientError) as err:
+        except (TimeoutError, aiohttp.ClientError) as err:
             _LOGGER.error('%s returned %s', self._api_url, err)
             return False
         try:
@@ -274,7 +279,7 @@ class WeatherData:
         if not ordered_entries:
             return {}
         ordered_entries.sort(key=lambda item: item[0])
-        res = dict()
+        res = {}
         res['datetime'] = time
         res['condition'] = get_data('symbol', ordered_entries)
         res['pressure'] = get_data('pressure', ordered_entries)
@@ -288,19 +293,19 @@ class WeatherData:
             res['cloudiness'] = get_data('cloudiness', ordered_entries)
         else:
             res['temperature'] = (
-                None if daily_temperatures == [] else max(daily_temperatures)
+                None if not daily_temperatures else max(daily_temperatures)
             )
             res['templow'] = (
-                None if daily_temperatures == [] else min(daily_temperatures)
+                None if not daily_temperatures else min(daily_temperatures)
             )
             res['precipitation'] = (
-                None if daily_precipitation == [] else round(sum(daily_precipitation), 1)
+                None if not daily_precipitation else round(sum(daily_precipitation), 1)
             )
             res['wind_speed'] = (
-                None if daily_windspeed == [] else max(daily_windspeed)
+                None if not daily_windspeed else max(daily_windspeed)
             )
             res['wind_gust'] = (
-                None if daily_windgust == [] else max(daily_windgust)
+                None if not daily_windgust else max(daily_windgust)
             )
         return res
 
@@ -327,6 +332,7 @@ def get_data(param, data):
     '''Retrieve weather parameter.'''
     try:
         for (_, selected_time_entry) in data:
+            new_state = []
             loc_data = selected_time_entry['location']
             if param not in loc_data:
                 continue
