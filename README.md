@@ -1,6 +1,6 @@
 # PyMetEireann
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/DylanGore/PyMetEireann/Publish%20Python%20%F0%9F%90%8D%20distributions%20%F0%9F%93%A6%20to%20PyPI?style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/DylanGore/PyMetEireann/release.yml?branch=main?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/DylanGore/PyMetEireann?style=for-the-badge)
 ![PyPI](https://img.shields.io/pypi/v/PyMetEireann?style=for-the-badge)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/PyMetEireann?style=for-the-badge)

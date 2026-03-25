@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "PyMetEireann"
+dynamic = ["version"]
+description = "A python wrapper for the Met Éireann (Irish National Meteorological Service) API"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = ["Met Eireann", "Weather", "Ireland", "Meteorology"]
+authors = [{ name = "Dylan Gore", email = "hello@dylangore.ie" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["aiohttp", "pytz", "requests", "xmltodict"]
+
+[project.optional-dependencies]
+lint = ["ruff"]
+build = ["build", "twine"]
+
+[project.urls]
+Homepage = "https://github.com/DylanGore/PyMetEireann"
+"Bug Tracker" = "https://github.com/DylanGore/PyMetEireann/issues"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+version_scheme = "no-guess-dev"
+fallback_version = "0.0.0-dev"
+
+[tool.hatch.build.targets.wheel]
+packages = ["meteireann"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["meteireann"]
