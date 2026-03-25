@@ -309,7 +309,7 @@ class WeatherData:
                 None if daily_windgust == [] else max(daily_windgust)
             )
             res['dew_point'] = (
-                None if daily_dew_point == [] else max(daily_dew_point)
+                None if not daily_dew_point else max(daily_dew_point)
             )
         return res
 
