@@ -5,7 +5,7 @@ import logging
 from xml.parsers.expat import ExpatError
 
 import aiohttp
-import async_timeout
+
 import pytz
 import xmltodict
 
@@ -106,8 +106,7 @@ class WarningData:
     async def fetching_data(self, *_):
         '''Get the latest data from the warning API'''
         try:
-            with async_timeout.timeout(10):
-                res = await self._websession.get(self._api_url)
+            res = await self._websession.get(self._api_url)
             # Log any 400+ HTTP error codes
             if res.status >= 400:
                 _LOGGER.error('%s returned %s', self._api_url, res.status)
@@ -165,7 +164,7 @@ class WeatherData:
         # pylint: disable=too-many-arguments
 
         # Get the current UTC time
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(datetime.timezone.utc)
 
         # Store the forecast parameters
         self._api_url = f'{api_url}?lat={latitude};long={longitude};alt={altitude};from={now.date()}T{now.hour}:00'
@@ -174,7 +173,7 @@ class WeatherData:
         if websession is None:
             async def _create_session():
                 self.created_session = True
-                return aiohttp.ClientSession()
+                return aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(10))
 
             loop = asyncio.get_event_loop()
             self._websession = loop.run_until_complete(_create_session())
@@ -186,8 +185,8 @@ class WeatherData:
     async def fetching_data(self, *_):
         '''Get the latest data from the API'''
         try:
-            with async_timeout.timeout(10):
-                resp = await self._websession.get(self._api_url)
+            
+            resp = await self._websession.get(self._api_url)
             # Log any 400+ HTTP error codes
             if resp.status >= 400:
                 _LOGGER.error('%s returned %s', self._api_url, resp.status)
@@ -280,6 +279,7 @@ class WeatherData:
         res['pressure'] = get_data('pressure', ordered_entries)
         res['humidity'] = get_data('humidity', ordered_entries)
         res['wind_bearing'] = get_data('windDirection', ordered_entries)
+        res['globalRadiation'] = get_data('globalRadiation', ordered_entries)
         if hourly:
             res['temperature'] = get_data('temperature', ordered_entries)
             res['precipitation'] = get_data('precipitation', ordered_entries)
@@ -338,6 +338,7 @@ def get_data(param, data):
                     'humidity',
                     'dewpointTemperature',
                     'precipitation',
+                    'globalRadiation',
             ):
                 new_state = get_value(loc_data[param], '@value')
             elif param in ('windSpeed', 'windGust'):

@@ -9,7 +9,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name='PyMetEireann',
     packages=['meteireann'],
-    install_requires=['xmltodict', 'aiohttp', 'async_timeout', 'pytz'],
+    install_requires=['xmltodict', 'aiohttp', 'pytz'],
     version='2024.11.0',
     description='A library to communicate with the Met Éireann Public Weather Forecast and Weather Warning APIs',
     long_description=long_description,
